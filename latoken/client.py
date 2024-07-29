@@ -1235,7 +1235,7 @@ class LatokenClient:
                 }
 
 
-    async def connect(self, streams: list = topics, signed: bool = False, on_message = None):
+    async def connect(self, interval, streams: list = topics, signed: bool = False, on_message = None, ):
 
             ws=websocket.create_connection(self.baseWS)
             msg = stomper.Frame()
@@ -1262,6 +1262,7 @@ class LatokenClient:
                 message = await ws.recv()
                 message = stomper.unpack_frame(message.decode())
                 await on_message(message)
+                await asyncio.sleep(interval)
 
 
     def run(self, connect):
