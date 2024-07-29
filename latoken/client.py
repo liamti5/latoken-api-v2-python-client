@@ -1259,7 +1259,7 @@ class LatokenClient:
 
             # Telling the application to execute a business logic on each message from the server
             while True:
-                message = await ws.recv()
+                message = ws.recv()
                 message = stomper.unpack_frame(message.decode())
                 await on_message(message)
                 await asyncio.sleep(interval)
