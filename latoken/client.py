@@ -1249,24 +1249,23 @@ class LatokenClient:
             if signed:
                 msg.headers.update(self._WSsigned())
 
-            ws.send(msg.pack())
-            ws.recv()
+            await ws.send(msg.pack())
+            await ws.recv()
 
             # Subscribing to streams, subscription id is assigned as an index in topics list
             for stream in streams:
                 msg = stomper.subscribe(stream, streams.index(stream), ack="auto")
-                ws.send(msg)
+                await ws.send(msg)
 
             # Telling the application to execute a business logic on each message from the server
             while True:
-                message = ws.recv()
+                message = await ws.recv()
                 message = stomper.unpack_frame(message.decode())
                 await on_message(message)
 
 
     def run(self, connect):
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(connect)
+        asyncio.run(connect)
 
 
     # Websocket streams
